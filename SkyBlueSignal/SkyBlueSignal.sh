@@ -2,14 +2,14 @@
 # ==============================================================================
 # SkyBlue Signal Pro - Universal Telnet Installer & Updater
 # Version: 1.3.0
-# Command: wget -q "--no-check-certificate" https://updates.skyblue1.us/e2/install-signal.sh -O - | /bin/sh
-#      or: curl -k -s https://updates.skyblue1.us/e2/install-signal.sh | /bin/sh
+# Command: wget -q "--no-check-certificate" https://github.com/emil182/emil-Nabil/raw/refs/heads/main/SkyBlueSignal/SkyBlueSignal.sh -O - | /bin/sh
+#      or: curl -k -s https://github.com/emil182/emil-Nabil/raw/refs/heads/main/SkyBlueSignal/SkyBlueSignal.sh | /bin/sh
 # ==============================================================================
 
 set -e
 
 VERSION="1.3.0"
-TAR_URL="https://updates.skyblue1.us/e2/signal/SkyBlueSignal.tar.gz"
+TAR_URL="https://github.com/emil182/emil-Nabil/raw/refs/heads/main/SkyBlueSignal/SkyBlueSignal.tar.gz"
 EXT_DIR="/usr/lib/enigma2/python/Plugins/Extensions"
 PLUGIN_DIR="$EXT_DIR/SkyBlueSignal"
 ARCHIVE="/tmp/SkyBlueSignal.tar.gz"
