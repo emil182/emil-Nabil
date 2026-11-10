@@ -1,8 +1,8 @@
 #!/bin/sh
-##setup command=wget -q --no-check-certificate http://dreambox4u.com/emilnabil237/plugins/ArabicSavior/installer.sh -O - | /bin/sh
+##setup command=wget -q --no-check-certificate https://github.com/emil182/emil-Nabil/raw/refs/heads/main/ArabicSavior/installer.sh -O - | /bin/sh
 
 PLUGIN_PATH="/usr/lib/enigma2/python/Plugins/Extensions/ArabicSavior"
-URL="http://dreambox4u.com/emilnabil237/plugins/ArabicSavior/ArabicSavior.tar.gz"
+URL="https://github.com/emil182/emil-Nabil/raw/refs/heads/main/ArabicSavior/ArabicSavior.tar.gz"
 FILE="/tmp/ArabicSavior.tar.gz"
 
 echo "Downloading and installing ArabicSavior plugin..."
@@ -75,4 +75,5 @@ echo "#                 mfaraj57  &  RAED                     #"
 echo "#########################################################"
 
 exit 0
+
 
