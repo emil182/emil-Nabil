@@ -1,5 +1,5 @@
 #!/bin/sh
-##setup command=wget -q "--no-check-certificate" https://github.com/emil182/emil-Nabil/raw/refs/heads/main/Epg-Grabber/installer.sh -O - | /bin/sh
+##setup command=wget -q "--no-check-certificate" https://raw.githubusercontent.com/emil182/emil-Nabil/refs/heads/main/Epg-Grabber/installer.sh -O - | /bin/sh
 
 ######### Only These two lines to edit with new version ######
 version=25.5
