@@ -1,135 +1,167 @@
 #!/bin/sh
 #
-# Command=wget https://dreambox4u.com/emilnabil237/channel/fifa-world/fifa-world.sh -O - | /bin/sh #
+# Command=wget https://github.com/emil182/emil-Nabil/raw/refs/heads/main/Channels/bouquets-ciefp_30w_abertis/ciefp_30w_abertis.sh -O - | /bin/sh #
 ####################
-echo " Removing older version "
+
+URL="https://github.com/emil182/emil-Nabil/raw/refs/heads/main/Channels/bouquets-ciefp_30w_abertis/bouquets.zip"
+ZIP_FILE="/tmp/bouquets.zip"
+
+echo "Removing older version..."
 sleep 1
 
-echo -n "Removing older version"
-for i in 1 2 3 4 5 6 7 8 9 10
-do
+for i in 1 2 3 4 5 6 7 8 9 10; do
     sleep 0.3
     echo -n "."
 done
 echo ""
 
-echo ""
 init 4
 sleep 1
 
-user_file_exists=false
-
-if ls /etc/enigma2/userbouquet.ciefp_30w_abertis.tv 1> /dev/null 2>&1 || ls /etc/enigma2/userbouquet.ciefp_30w_abertis*.radio 1> /dev/null 2>&1; then
-    echo " An older version of was found "
+if ls /etc/enigma2/userbouquet.ciefp_30w_abertis* >/dev/null 2>&1; then
+    echo "An older version was found"
     sleep 1
 
-    rm -f /etc/enigma2/userbouquet.ciefp_30w_abertis.tv > /dev/null 2>&1
-    rm -f /etc/enigma2/userbouquet.ciefp_30w_abertis*.radio > /dev/null 2>&1
+    rm -f /etc/enigma2/userbouquet.ciefp_30w_abertis*.tv >/dev/null 2>&1
+    rm -f /etc/enigma2/userbouquet.ciefp_30w_abertis*.radio >/dev/null 2>&1
 
-    cd /etc/enigma2
+    cd /etc/enigma2 || { echo "ERROR: cannot cd to /etc/enigma2"; exit 1; }
 
-    sed -i '/userbouquet.ciefp_30w_abertis/d' bouquets.tv > /dev/null 2>&1
-    sed -i '/userbouquet.ciefp_30w_abertis/d' bouquets.radio > /dev/null 2>&1
+    sed -i '/userbouquet.ciefp_30w_abertis/d' bouquets.tv >/dev/null 2>&1
+    sed -i '/userbouquet.ciefp_30w_abertis/d' bouquets.radio >/dev/null 2>&1
 
-    echo "An older version of userbouquet.ciefp_30w_abertis removed "
-    user_file_exists=true
+    echo "An older version of userbouquet.ciefp_30w_abertis removed"
     echo ""
 else
-    if [ "$user_file_exists" = false ]; then
-        echo "There is no bouquets of userbouquet.fifa_world_cup_2026 in Your Image..."
-    fi
-fi
-
-sleep 1 
-cd /tmp
-rm -f bouquets.zip
-cd /
-echo "Download Settings-userbouquet.fifa_world_cup_2026-Favorite"
-sleep 3
-echo ""
-
-cd /tmp
-echo "Downloading file..."
-curl -k -L --max-time 120 "https://dreambox4u.com/emilnabil237/channel/fifa-world/bouquets.zip" -o /tmp/bouquets.zip
-
-if [ ! -f /tmp/bouquets.zip ] || [ $(stat -c%s /tmp/bouquets.zip) -lt 100 ]; then
-    echo "Download failed or file is corrupted!"
-    echo "Trying with wget..."
-    wget -O /tmp/bouquets.zip "https://dreambox4u.com/emilnabil237/channel/fifa-world/bouquets.zip"
+    echo "There is no bouquet of userbouquet.ciefp_30w_abertis in your Image..."
 fi
 
 sleep 1
 
-if [ ! -f /tmp/bouquets.zip ]; then
+if ! command -v curl >/dev/null 2>&1 && ! command -v wget >/dev/null 2>&1; then
+    echo "ERROR: Neither curl nor wget is available."
+    exit 1
+fi
+
+if ! command -v unzip >/dev/null 2>&1; then
+    echo "ERROR: unzip is not installed."
+    exit 1
+fi
+
+cd /tmp || { echo "ERROR: cannot cd to /tmp"; exit 1; }
+rm -f "$ZIP_FILE"
+
+echo "Downloading Settings-userbouquet.ciefp_30w_abertis-Favorite..."
+sleep 1
+
+if command -v curl >/dev/null 2>&1; then
+    curl -k -L --retry 3 --retry-delay 2 --retry-all-errors --connect-timeout 20 --max-time 120 -o "$ZIP_FILE" "$URL"
+else
+    wget -q --no-check-certificate --timeout=30 --tries=3 -O "$ZIP_FILE" "$URL"
+fi
+
+if [ ! -s "$ZIP_FILE" ] || [ "$(stat -c%s "$ZIP_FILE" 2>/dev/null || echo 0)" -lt 100 ]; then
+    if command -v wget >/dev/null 2>&1; then
+        echo "Download failed or file is corrupted, trying with wget..."
+        rm -f "$ZIP_FILE"
+        wget -q --no-check-certificate --timeout=30 --tries=3 -O "$ZIP_FILE" "$URL"
+    fi
+fi
+
+if [ ! -s "$ZIP_FILE" ]; then
     echo "ERROR: Failed to download bouquets.zip"
-    init 3
+    rm -f "$ZIP_FILE"
     exit 1
 fi
 
-echo "File downloaded successfully. Size: $(stat -c%s /tmp/bouquets.zip) bytes"
-echo "Attempting to unzip..."
+if ! unzip -t "$ZIP_FILE" >/dev/null 2>&1; then
+    echo "ERROR: Downloaded zip file is corrupted."
+    rm -f "$ZIP_FILE"
+    exit 1
+fi
 
-cd /tmp
+echo "File downloaded successfully. Size: $(stat -c%s "$ZIP_FILE") bytes"
+echo "Extracting..."
 
-unzip -o bouquets.zip 2>&1
+cd /tmp || { echo "ERROR: cannot cd to /tmp"; exit 1; }
 
-if [ $? -ne 0 ]; then
+if ! unzip -o "$ZIP_FILE" >/dev/null 2>&1; then
     echo "ERROR: Failed to unzip bouquets.zip"
-    init 3
+    rm -f "$ZIP_FILE"
     exit 1
 fi
 
-sleep 2
+sleep 1
 
 echo "Copying .tv and .radio files to /etc/enigma2/ ..."
 
-if ls /tmp/*.tv 1> /dev/null 2>&1; then
+COPIED=0
+if ls /tmp/*.tv >/dev/null 2>&1; then
     cp -prf /tmp/*.tv /etc/enigma2/
     echo "TV files copied successfully"
+    COPIED=1
 fi
 
-if ls /tmp/*.radio 1> /dev/null 2>&1; then
+if ls /tmp/*.radio >/dev/null 2>&1; then
     cp -prf /tmp/*.radio /etc/enigma2/
     echo "Radio files copied successfully"
+    COPIED=1
 fi
 
-if ls /tmp/*.del 1> /dev/null 2>&1; then
-    cp -prf /tmp/*.del /etc/enigma2/
+if ls /tmp/*.del >/dev/null 2>&1; then
+    cp -prf /tmp/*.del /etc/enigma2/ 2>/dev/null
+fi
+
+if [ "$COPIED" -eq 0 ]; then
+    echo "ERROR: No .tv or .radio files found in the zip."
+    rm -f /tmp/*.tv /tmp/*.radio /tmp/*.del "$ZIP_FILE" 2>/dev/null
+    exit 1
 fi
 
 echo "Cleaning up temporary files..."
-rm -f /tmp/*.tv /tmp/*.radio /tmp/*.del 2>/dev/null
-rm -f /tmp/bouquets.zip
+rm -f /tmp/*.tv /tmp/*.radio /tmp/*.del "$ZIP_FILE" 2>/dev/null
 echo "Temporary files removed"
 
-cd /etc/enigma2
+cd /etc/enigma2 || { echo "ERROR: cannot cd to /etc/enigma2"; exit 1; }
 
-sed -i '/userbouquet.fifa_world_cup_2026__tv_.tv/d' bouquets.tv
+BOUQUET_FILE="userbouquet.ciefp_30w_abertis.tv"
+
+if [ ! -f "/etc/enigma2/$BOUQUET_FILE" ]; then
+    DETECTED=$(ls /etc/enigma2/userbouquet.ciefp_30w_abertis*.tv 2>/dev/null | head -n1)
+    if [ -n "$DETECTED" ]; then
+        BOUQUET_FILE=$(basename "$DETECTED")
+    fi
+fi
+
+if [ ! -f "/etc/enigma2/$BOUQUET_FILE" ]; then
+    echo "ERROR: Bouquet file not found in /etc/enigma2/"
+    exit 1
+fi
+
+sed -i "/$BOUQUET_FILE/d" bouquets.tv 2>/dev/null
 
 TEMP_FILE=$(mktemp)
 
-echo '#SERVICE 1:7:1:0:0:0:0:0:0:0:FROM BOUQUET "userbouquet.fifa_world_cup_2026__tv_.tv" ORDER BY bouquet' > "$TEMP_FILE"
+echo "#SERVICE 1:7:1:0:0:0:0:0:0:0:FROM BOUQUET \"$BOUQUET_FILE\" ORDER BY bouquet" > "$TEMP_FILE"
 
-cat bouquets.tv >> "$TEMP_FILE"
+if [ -f bouquets.tv ]; then
+    cat bouquets.tv >> "$TEMP_FILE"
+fi
 
 mv "$TEMP_FILE" bouquets.tv
+chmod 644 bouquets.tv
 
 echo "Bouquet added at the beginning of favorites list"
 
 echo ""
-echo 'RELOADING SERVICES - PLEASE WAIT'
-echo " FAV SUCCESSFULLY INSTALLED    "
+echo "FAV SUCCESSFULLY INSTALLED"
 echo ""
 
 echo "Installed files:"
-ls -la /etc/enigma2/userbouquet.fifa_world_cup_2026* 2>/dev/null
+ls -la /etc/enigma2/userbouquet.ciefp_30w_abertis* 2>/dev/null
 
 echo ""
 echo "Cleanup completed successfully"
 
-sleep 3
-init 3 
 exit 0
-
-
 
