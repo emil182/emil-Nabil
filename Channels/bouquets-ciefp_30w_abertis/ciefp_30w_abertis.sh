@@ -15,8 +15,7 @@ for i in 1 2 3 4 5 6 7 8 9 10; do
 done
 echo ""
 
-init 4
-sleep 1
+cp -f /etc/enigma2/bouquets.tv /etc/enigma2/bouquets.tv.bak 2>/dev/null
 
 if ls /etc/enigma2/userbouquet.ciefp_30w_abertis* >/dev/null 2>&1; then
     echo "An older version was found"
@@ -148,8 +147,10 @@ if [ -f bouquets.tv ]; then
     cat bouquets.tv >> "$TEMP_FILE"
 fi
 
+sync
 mv "$TEMP_FILE" bouquets.tv
 chmod 644 bouquets.tv
+sync
 
 echo "Bouquet added at the beginning of favorites list"
 
@@ -162,6 +163,13 @@ ls -la /etc/enigma2/userbouquet.ciefp_30w_abertis* 2>/dev/null
 
 echo ""
 echo "Cleanup completed successfully"
+
+echo ""
+echo "=========================================="
+echo "IMPORTANT: Please restart Enigma2 GUI"
+echo "(Menu -> Standby / Restart -> Restart GUI)"
+echo "=========================================="
+echo ""
 
 exit 0
 
