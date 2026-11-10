@@ -1,5 +1,5 @@
 #!/bin/bash
-##command=wget --no-check-certificate -O - https://github.com/emilnabil/aglare/raw/refs/heads/main/skins-aglare-fhd.sh | /bin/sh
+##command=wget --no-check-certificate -O - https://github.com/emil182/emil-Nabil/raw/refs/heads/main/skins-aglare-fhd/skins-aglare-fhd.sh | /bin/sh
 
 echo "Removing previous version of Aglare-FHD..."
 sleep 2
@@ -29,7 +29,7 @@ if ! command -v tar >/dev/null 2>&1 || ! command -v gzip >/dev/null 2>&1; then
     exit 1
 fi
 
-URL="https://github.com/emilnabil/aglare/raw/refs/heads/main/skins-aglare-fhd.tar.gz"
+URL="https://github.com/emil182/emil-Nabil/raw/refs/heads/main/skins-aglare-fhd/skins-aglare-fhd.tar.gz"
 FILE="/tmp/skins-aglare-fhd.tar.gz"
 
 cd /tmp || { echo "ERROR: cannot cd to /tmp"; exit 1; }
@@ -81,4 +81,5 @@ echo ">>>>>>>>>>Aglare-FHD Skin by MNASR<<<<<<<<<<"
 sleep 2
 
 exit 0
+
 
