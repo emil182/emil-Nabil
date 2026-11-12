@@ -1,12 +1,12 @@
 #!/bin/sh
-### wget --no-check-certificate -O - https://github.com/emilnabil/download-plugins/raw/refs/heads/main/AutoBiss/AutoBiss.sh | /bin/sh
-
+### wget --no-check-certificate -O - https://github.com/emil182/emil-Nabil/raw/refs/heads/main/SignalMeterFirebase/SignalMeterFirebase.sh | /bin/sh
+##############################
 echo " Download And Install Plugin AutoBiss "
 
 TEMPATH=/tmp
 MY_IPK="enigma2-plugin-extensions-signalmeterfirebase_all.ipk"
 MY_DEB="enigma2-plugin-extensions-signalmeterfirebase_all.deb"
-MY_URL="https://github.com/emilnabil/download-plugins/raw/refs/heads/main/AutoBiss"
+MY_URL="https://github.com/emil182/emil-Nabil/raw/refs/heads/main/SignalMeterFirebase"
 
 OS="Unknown"
 if [ -f /etc/apt/apt.conf ]; then
